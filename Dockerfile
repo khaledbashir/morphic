@@ -10,6 +10,12 @@ RUN bun install
 # Copy source code and build
 COPY . .
 RUN bun next telemetry disable
+
+# --- FIX: Inject Build Args as Env Vars ---
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+# -----------------------------------------
+
 RUN bun run build
 
 # Runtime stage
