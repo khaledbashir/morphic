@@ -1,9 +1,9 @@
-# Base image
-FROM oven/bun:1.2.12 AS builder
+# Base image - Using 1.1.27 for stability
+FROM oven/bun:1.1.27 AS builder
 
 WORKDIR /app
 
-# Install dependencies (separated for better cache utilization)
+# Install dependencies
 COPY package.json bun.lock ./
 RUN bun install
 
@@ -28,7 +28,7 @@ RUN bun next telemetry disable
 RUN bun run build
 
 # Runtime stage
-FROM oven/bun:1.2.12 AS runner
+FROM oven/bun:1.1.27 AS runner
 WORKDIR /app
 
 # Copy only necessary files from builder
