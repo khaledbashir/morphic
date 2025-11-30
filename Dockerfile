@@ -7,15 +7,24 @@ WORKDIR /app
 COPY package.json bun.lock ./
 RUN bun install
 
-# Copy source code and build
+# Copy source code
 COPY . .
-RUN bun next telemetry disable
 
-# --- FIX: Inject Build Args as Env Vars ---
+# --- FIX: Inject Easypanel Env Vars into Build ---
 ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
-# -----------------------------------------
 
+ARG NEXT_PUBLIC_ENABLE_AUTH
+ENV NEXT_PUBLIC_ENABLE_AUTH=$NEXT_PUBLIC_ENABLE_AUTH
+
+ARG NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+# -------------------------------------------------
+
+RUN bun next telemetry disable
 RUN bun run build
 
 # Runtime stage
